@@ -20,18 +20,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
-
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.size
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import com.dado.cuadricula_jesse.data.DataSource
 
 class MainActivity : ComponentActivity() {
@@ -45,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ){
                     AffirmationsApp(
-                        modifier = Modifier.padding(dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding))
+                        modifier = Modifier.padding(dimensionResource(R.dimen.padding8))
                     )
                 }
             }
@@ -53,11 +51,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 @Composable
-fun AffirmationsApp(modifier: Modifier =Modifier) {
+fun AffirmationsApp(modifier: Modifier = Modifier) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(androidx.core.R.dimen.notification_small_icon_size_as_large)),
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding8)),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding8)),
         modifier = modifier
     ) {
         items(DataSource.topics) { topic ->
@@ -72,38 +70,37 @@ fun AffirmationCard(topic: Topic,modifier: Modifier = Modifier) {
         Row{
             Box{
                 Image(
-                    painter = painterResource(topic.imageRes),
+                    painter = painterResource(id = topic.imageRes),
                     contentDescription = null,
-                    modifier = Modifier
-                        .size(width =68.dp,height = 68.dp)
+                    modifier = modifier
+                        .size(width = dimensionResource(R.dimen.padding68), height = dimensionResource(R.dimen.padding68))
                         .aspectRatio(1f),
                     contentScale = ContentScale.Crop
                 )
             }
 
         Column {
-
             Text(
-                text = LocalContext.current.getString(topic.name),
-                style = MaterialTheme.typography.headlineMedium,
+                text = stringResource(id = topic.name),
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(
-                    start = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding),
-                    top = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding),
-                    end = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding),
-                    bottom = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding)
+                    start = dimensionResource(R.dimen.padding16),
+                    top = dimensionResource(R.dimen.padding16),
+                    end = dimensionResource(R.dimen.padding16),
+                    bottom = dimensionResource(R.dimen.padding8)
                 )
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_launcher_background),
+                    painter = painterResource(R.drawable.ic_grain),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(start = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding))
+                        .padding(start = dimensionResource(R.dimen.padding16))
                 )
                 Text(
                     text = topic.availableCourses.toString(),
                     style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.padding(start = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding))
+                    modifier = Modifier.padding(start = dimensionResource(R.dimen.padding8))
                 )
                 }
             }
