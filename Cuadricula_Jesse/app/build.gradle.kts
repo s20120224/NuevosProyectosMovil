@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.dado.cuadricula_jesse"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.dado.cuadricula_jesse"

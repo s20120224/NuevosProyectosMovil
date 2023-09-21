@@ -21,9 +21,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import com.dado.cuadricula_jesse.data.DataSource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,31 +36,18 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
+                ){
+                    AffirmationsApp()
                 }
             }
         }
     }
 }
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Cuadricula_JesseTheme {
-        Greeting("Android")
-    }
-}
 @Composable
 fun AffirmationsApp() {
+    TopicList(
+        topicList = DataSource().loadTopics(),
+    )
 }
 
 @Composable
@@ -86,4 +75,16 @@ fun AffirmationCard(topic: Topic,modifier: Modifier = Modifier) {
 @Composable
 private fun TopicCardPreview() {
     AffirmationCard(Topic(R.string.architecture, R.drawable.architecture))
+}
+@Composable
+fun TopicList(topicList: List<Topic>, modifier: Modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
+        items(topicList) { topic ->
+            AffirmationCard(
+                topic = topic,
+                modifier = Modifier.padding(8.dp)
+            )
+
+        }
+    }
 }
