@@ -15,16 +15,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.dado.cuadricula_jesse.ui.theme.Cuadricula_JesseTheme
 import com.dado.cuadricula_jesse.model.Topic
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.padding
+
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.dimensionResource
 import com.dado.cuadricula_jesse.data.DataSource
 
 class MainActivity : ComponentActivity() {
@@ -37,54 +44,84 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ){
-                    AffirmationsApp()
+                    AffirmationsApp(
+                        modifier = Modifier.padding(dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding))
+                    )
                 }
             }
         }
     }
 }
 @Composable
-fun AffirmationsApp() {
-    TopicList(
-        topicList = DataSource().loadTopics(),
-    )
-}
-
-@Composable
-fun AffirmationCard(topic: Topic,modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        Column {
-            Image(
-                painter = painterResource(topic.imageRes),
-                contentDescription = stringResource(topic.name),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(194.dp),
-                contentScale = ContentScale.Crop
-            )
-            Text(
-                text = LocalContext.current.getString(topic.name),
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.headlineSmall
-            )
+fun AffirmationsApp(modifier: Modifier =Modifier) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(androidx.core.R.dimen.notification_small_icon_size_as_large)),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding)),
+        modifier = modifier
+    ) {
+        items(DataSource.topics) { topic ->
+            AffirmationCard(topic)
         }
     }
 }
 
-@Preview
+@Composable
+fun AffirmationCard(topic: Topic,modifier: Modifier = Modifier) {
+    Card{
+        Row{
+            Box{
+                Image(
+                    painter = painterResource(topic.imageRes),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(width =68.dp,height = 68.dp)
+                        .aspectRatio(1f),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+        Column {
+
+            Text(
+                text = LocalContext.current.getString(topic.name),
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(
+                    start = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding),
+                    top = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding),
+                    end = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding),
+                    bottom = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding)
+                )
+            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_launcher_background),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(start = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding))
+                )
+                Text(
+                    text = topic.availableCourses.toString(),
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(start = dimensionResource(androidx.core.R.dimen.notification_small_icon_background_padding))
+                )
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
 @Composable
 private fun TopicCardPreview() {
-    AffirmationCard(Topic(R.string.architecture, R.drawable.architecture))
-}
-@Composable
-fun TopicList(topicList: List<Topic>, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
-        items(topicList) { topic ->
-            AffirmationCard(
-                topic = topic,
-                modifier = Modifier.padding(8.dp)
-            )
-
+    Cuadricula_JesseTheme {
+        val topic = Topic(R.string.architecture, 321, R.drawable.architecture)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            AffirmationCard(topic= topic)
         }
     }
 }
